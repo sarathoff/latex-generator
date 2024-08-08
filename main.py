@@ -1,10 +1,8 @@
-import os
 import streamlit as st
-from dotenv import load_dotenv
 import google.generativeai as gen_ai
 
-# Load environment variables
-load_dotenv()
+# Set API key directly
+GOOGLE_API_KEY = "AIzaSyCO7WIRmXTQUPeiARLTklKLufkZRfjfg4U"
 
 # Configure Streamlit page settings
 st.set_page_config(
@@ -13,14 +11,12 @@ st.set_page_config(
     layout="centered",  # Page layout option
 )
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-
 # Set up Google Gemini-Pro AI model
 gen_ai.configure(api_key=GOOGLE_API_KEY)
 model = gen_ai.GenerativeModel('gemini-pro')
 
 # Define the LaTeX template as a raw string
-inspired= r"""
+inspired = r"""
 \documentclass[11pt,a4paper,sans]{moderncv}
 
 % ModernCV themes
@@ -74,9 +70,6 @@ inspired= r"""
 \cvitem{Sports}{Playing cricket and badminton in my free time.}
 
 \end{document}
-
-
-
 """
 
 # Streamlit app layout
@@ -90,7 +83,7 @@ if st.button("Generate"):
     prompt = f"""
     build a resume using latex code for me this is my profile {user_description} use this as template to make my resume {inspired}
     """
-    
+
     with st.spinner("Generating ATS-friendly resume LaTeX code..."):
         # Generate LaTeX code using the Gemini-Pro model
         response = model.generate_content([prompt])
